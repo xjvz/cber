@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatBypasserV1.0</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        h1 {
+            text-shadow: 0 0 10px #bb86fc, 0 0 20px #bb86fc;
+        }
+        textarea {
+            width: 80%;
+            height: 100px;
+            margin-bottom: 20px;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #1e1e1e;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #bb86fc;
+            color: #121212;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #3700b3;
+        }
+        #output {
+            width: 80%;
+            height: 100px;
+            background-color: #1e1e1e;
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 16px;
+            resize: none;
+            overflow: auto;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+ 
+    <h1>ChatBypasserV1.0</h1>
+    <textarea id="inputText" placeholder="Enter your text here..."></textarea>
+    <button onclick="transformText()">Transform Text</button>
+    <textarea id="output" readonly></textarea>
+ 
+    <script>
+        function transformText() {
+            const inputText = document.getElementById("inputText").value;
+ 
+            // Letter transformations
+            const letterTransformations = {
+                'c': 'с',
+                'C': 'С',
+                'a': 'а',
+                'A': 'А',
+                'o': 'о',
+                'O': 'О',
+                'j': 'ј',
+                'p': 'р',
+                'l': 'ӏ',
+                'e': 'е',
+                'i': 'ı̇',             // Replace lowercase 'i' with 'ı̇'
+                'I': 'І',              // Replace uppercase 'I' with 'І'
+                'y': 'у',              // Replace 'y' with 'у'
+                'B': 'В',              // Replace 'B' with 'В'
+                'S': 'Ѕ'               // Replace 'S' with 'Ѕ'
+            };
+ 
+            let transformedText = inputText;
+ 
+            // Apply letter transformations
+            for (const [original, replacement] of Object.entries(letterTransformations)) {
+                const regex = new RegExp(original, 'g'); // Case-sensitive search for each letter
+                transformedText = transformedText.replace(regex, replacement);
+            }
+ 
+            // Replace spaces with ' ̃' (space + ̃)
+            transformedText = transformedText.replace(/ /g, ' ̃');
+ 
+            // Randomly add line break character (U+2028) in the middle of words with a 5% chance
+            let finalText = '';
+            for (let char of transformedText) {
+                finalText += char;
+                if (Math.random() < 0.05) { // 5% chance
+                    finalText += '\u2028'; // Add line break character
+                }
+            }
+ 
+            // Display transformed text
+            document.getElementById("output").value = finalText;
+ 
+            // Copy to clipboard
+            copyToClipboard(finalText);
+        }
+ 
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                console.log('Text copied to clipboard');
+            }).catch(err => {
+                console.error('Could not copy text: ', err);
+            });
+        }
+    </script>
+ 
+</body>
+</html>
